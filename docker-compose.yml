@@ -1,5 +1,5 @@
 mysql:
-    build: ./mysql
+    build: ~/LNMP/mysql
     ports:
       - "3306:3306"
     privileged:
@@ -10,7 +10,7 @@ mysql:
       MYSQL_ROOT_PASSWORD : "root"
       TZ : "Asia/Shanghai"
 mongodb:
-    build: ./mongodb
+    build: ~/LNMP/mongodb
     ports:
       - "27017:27017"
     privileged:
@@ -22,19 +22,18 @@ mongodb:
       MONGO_INITDB_ROOT_PASSWORD : "root"
       TZ : "Asia/Shanghai"
 redis:
-    build: ./redis
+    build: ~/LNMP/redis
     ports:
       - "6379:6379"
     privileged:
       true  
     volumes:
       - ~/LNMP/redis/data:/var/lib/redis
-      # - ~/LNMP/redis/redis.conf:/usr/local/etc/redis/redis.conf
     environment:
       MYSQL_ROOT_PASSWORD : "root"
       TZ : "Asia/Shanghai"
 phpfpm:
-    build: ./php
+    build: ~/LNMP/php
     ports:
       - "9000:9000"
     privileged:
@@ -51,7 +50,7 @@ phpfpm:
     environment:
       TZ : "Asia/Shanghai"
 nginx:
-    build: ./nginx
+    build: ~/LNMP/nginx
     ports:
       - "80:80"
     links:
