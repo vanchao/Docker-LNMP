@@ -1,0 +1,68 @@
+mysql:
+    build: ./mysql
+    ports:
+      - "3306:3306"
+    privileged:
+      true  
+    volumes:
+      - ~/LNMP/mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD : "root"
+      TZ : "Asia/Shanghai"
+mongodb:
+    build: ./mongodb
+    ports:
+      - "27017:27017"
+    privileged:
+      true  
+    volumes:
+      - ~/LNMP/mongodb/data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME : "root"
+      MONGO_INITDB_ROOT_PASSWORD : "root"
+      TZ : "Asia/Shanghai"
+redis:
+    build: ./redis
+    ports:
+      - "6379:6379"
+    privileged:
+      true  
+    volumes:
+      - ~/LNMP/redis/data:/var/lib/redis
+      # - ~/LNMP/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      MYSQL_ROOT_PASSWORD : "root"
+      TZ : "Asia/Shanghai"
+phpfpm:
+    build: ./php
+    ports:
+      - "9000:9000"
+    privileged:
+      true  
+    volumes:
+      - ~/LNMP/html:/var/www/html
+      - ~/LNMP/composer:/var/www/composer
+      - ~/LNMP/vhosts:/var/www/vhosts
+      - ~/LNMP/lua:/var/www/lua
+    links:
+      - "mysql"
+      - "redis"
+      - "mongodb"
+    environment:
+      TZ : "Asia/Shanghai"
+nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    links:
+      - "phpfpm"
+      - "mysql"
+      - "redis"
+      - "mongodb"
+    volumes:
+      - ~/LNMP/nginx/conf:/etc/nginx/conf.d
+      - ~/LNMP/html:/var/www/html
+      - ~/LNMP/vhosts:/var/www/vhosts
+      - ~/LNMP/lua:/var/www/lua
+    environment:
+      TZ : "Asia/Shanghai"
